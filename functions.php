@@ -18,3 +18,15 @@ function authorize($condition, $status = Response::FORBIDDEN)
     abort($status);
   }
 }
+
+function base_path($path)
+{
+  return BASE_PATH . $path;
+}
+
+function view($path, $attributes = [])
+{
+  // turn the set of array into variables
+  extract($attributes);
+  require base_path('views/' . $path); // /views/index.view.php
+}
