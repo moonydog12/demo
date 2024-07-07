@@ -1,5 +1,11 @@
 <?php
 // Connect to the database, and execute a query
+namespace Core;
+
+use PDO;
+
+use PDOException;
+
 class Database
 {
   public $connection;
