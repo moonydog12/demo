@@ -2,20 +2,38 @@
 
 use Core\Database;
 
-$currentUserId = 4;
 $config = require base_path('config.php');
 $db = new Database($config['database']);
+$currentUserId = 4;
 
-$note = $db->query(
-  'SELECT * FROM notes WHERE id = :id',
-  [
-    'id' =>  $_GET['id'],
-  ]
-)->findOrFail();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $note = $db->query(
+    'SELECT * FROM notes WHERE id = :id',
+    [
+      'id' =>  $_GET['id'],
+    ]
+  )->findOrFail();
 
-authorize($note['user_id'] === $currentUserId);
+  authorize($note['user_id'] === $currentUserId);
 
-view('notes/show.view.php', [
-  'heading' => 'Note',
-  'note' => $note,
-]);
+  // form was submitted. delete the current note
+  $db->query('DELETE FROM notes WHERE id = :id', [
+    'id' => $_GET['id']
+  ]);
+
+  header('location: /notes');
+} else {
+  $note = $db->query(
+    'SELECT * FROM notes WHERE id = :id',
+    [
+      'id' =>  $_GET['id'],
+    ]
+  )->findOrFail();
+
+  authorize($note['user_id'] === $currentUserId);
+
+  view('notes/show.view.php', [
+    'heading' => 'Note',
+    'note' => $note,
+  ]);
+}
