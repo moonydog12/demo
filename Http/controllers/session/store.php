@@ -13,11 +13,14 @@ if ($form->validate($email, $password)) {
   if ($auth->attempt($email, $password)) {
     redirect('/');
   }
-  
+
   // password validation fail
-  $form->addError('email', 'No matching accounts found for that email and password.');
+  $form->addError(
+    'email',
+    'No matching accounts found for that email and password.'
+  );
 }
 
 return view('session/create.view.php', [
-  'errors' => $form->getErrors()
+  'errors' => $form->getErrors(),
 ]);

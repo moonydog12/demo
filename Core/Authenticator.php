@@ -7,16 +7,18 @@ class Authenticator
   public function attempt($email, $password)
   {
     // match the credentials
-    $user = App::resolve(Database::class)->query('SELECT * FROM users WHERE email = :email', [
-      'email' => $email,
-    ])->find();
+    $user = App::resolve(Database::class)
+      ->query('SELECT * FROM users WHERE email = :email', [
+        'email' => $email,
+      ])
+      ->find();
 
     if ($user) {
       // we have a user, but we don't know if the password matches what we have in the db
       if (password_verify($password, $user['password'])) {
         // log in the user if the credentials match
         $this->login([
-          'email' => $email
+          'email' => $email,
         ]);
 
         return true;
@@ -29,7 +31,7 @@ class Authenticator
   public function login($user)
   {
     $_SESSION['user'] = [
-      'email' => $user['email']
+      'email' => $user['email'],
     ];
 
     // update the session id with regenerated one
@@ -44,6 +46,12 @@ class Authenticator
 
     // delete cookie
     $params = session_get_cookie_params();
-    setcookie('PHPSESSID', '', time() - 3600, $params['path'], $params['domain']);
+    setcookie(
+      'PHPSESSID',
+      '',
+      time() - 3600,
+      $params['path'],
+      $params['domain']
+    );
   }
 }

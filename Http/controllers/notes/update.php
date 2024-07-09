@@ -8,9 +8,11 @@ $db = App::resolve(Database::class);
 $currentUserId = 1;
 
 // find the corresponding note
-$note = $db->query('SELECT * FROM notes WHERE id = :id', [
-  'id' => $_POST['id']
-])->findOrFail();
+$note = $db
+  ->query('SELECT * FROM notes WHERE id = :id', [
+    'id' => $_POST['id'],
+  ])
+  ->findOrFail();
 
 // authorize that the current user can edit the note
 authorize($note['user_id'] === $currentUserId);
@@ -27,13 +29,13 @@ if (count($errors)) {
   return view('notes/edit.view.php', [
     'heading' => 'Edit note',
     'errors' => $errors,
-    'note' => $note
+    'note' => $note,
   ]);
 }
 
 $db->query('UPDATE notes SET body = :body WHERE id = :id', [
   'id' => $_POST['id'],
-  'body' => $_POST['body']
+  'body' => $_POST['body'],
 ]);
 
 // redirect the user

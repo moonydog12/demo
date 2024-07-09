@@ -14,7 +14,8 @@ if (!Validator::email($email)) {
 }
 
 if (!Validator::string($password, 7, 255)) {
-  $errors['password'] = 'Please provide a password of at least seven characters.';
+  $errors['password'] =
+    'Please provide a password of at least seven characters.';
 }
 
 if (!empty($errors)) {
@@ -23,18 +24,19 @@ if (!empty($errors)) {
   ]);
 }
 
-
 $db = App::resolve(Database::class);
 // check if the account already exists
-$user = $db->query('SELECT * FROM users WHERE email = :email', [
-  'email' => $email,
-])->find();
+$user = $db
+  ->query('SELECT * FROM users WHERE email = :email', [
+    'email' => $email,
+  ])
+  ->find();
 
 if ($user) {
   // then someone with that email already exists and has an account.
   // if yes, redirect to  login page.
   $_SESSION['user'] = [
-    'email' => $email
+    'email' => $email,
   ];
   header('location: /');
   exit();
@@ -42,12 +44,12 @@ if ($user) {
   // if not, save one to the database, and then log the user in, and redirect
   $db->query('INSERT INTO users(email, password) VALUES(:email, :password)', [
     'email' => $email,
-    'password' => password_hash($password, PASSWORD_BCRYPT)
+    'password' => password_hash($password, PASSWORD_BCRYPT),
   ]);
 
   // mark that the user has logged in
   login([
-    'email' => $email
+    'email' => $email,
   ]);
   header('location: /');
   exit();

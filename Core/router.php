@@ -24,7 +24,7 @@ class Router
       'uri' => $uri,
       'controller' => $controller,
       'method' => $method,
-      'middleware' => null
+      'middleware' => null,
     ];
 
     return $this;
