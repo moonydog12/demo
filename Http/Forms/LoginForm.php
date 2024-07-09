@@ -26,11 +26,17 @@ class LoginForm
   {
     $instance = new static($attributes);
 
-    if ($instance->failed()) {
-      ValidationException::throw($instance->getErrors(), $instance->attributes);
-    }
+    // if ($instance->failed()) {
+    //   $instance->throw();
+    // }
 
-    return $instance;
+    // return $instance;
+    return $instance->failed() ? $instance->throw() : $instance;
+  }
+
+  public function throw()
+  {
+    ValidationException::throw($this->getErrors(), $this->attributes);
   }
 
   public function failed()
@@ -46,5 +52,6 @@ class LoginForm
   public function addError($field, $message)
   {
     $this->errors[$field] = $message;
+    return $this;
   }
 }

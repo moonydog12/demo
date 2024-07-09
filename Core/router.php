@@ -17,6 +17,11 @@ class Router
     die();
   }
 
+  public function previousUrl()
+  {
+    return $_SERVER['HTTP_REFERER'];
+  }
+
   public function add($method, $uri, $controller)
   {
     // push new item to the routes array
