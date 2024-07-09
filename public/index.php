@@ -1,4 +1,5 @@
 <?php
+use Core\Session;
 
 session_start();
 
@@ -23,3 +24,6 @@ $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
 // routeToController($uri, $routes);
 $router->route($uri, $method);
+
+// clear out flash session data
+Session::unflash();
